@@ -4,6 +4,8 @@ import { AuthService } from "./auth.service";
 import { Request, Response as Res } from "express";
 import JwtRefreshGuard from "./jwt-refresh.quard";
 import { JwtAuthGuard } from "./jwt-auth.guard";
+import {Roles} from '../auth/roles-auth.decorator'
+import {RolesGuard} from '../auth/roles.guard'
 import RequestWithUser from "./requestWithUser.interface";
 
 
@@ -22,9 +24,11 @@ export class AuthController {
     return {Authentication: token, Refresh: refreshToken, userId };
   }
 
+  @Roles('OWNER')
+  @UseGuards(RolesGuard)
   @Post("/registration")
   async registration(@Body() userDto: CreateUserDto,
-                     @Req() request: Request) {
+                    @Req() request: Request) {
     const { token, tokenCookie, refreshToken, refreshTokenCookie, userId } = await this.authService.registration(userDto);
     await this.authService.setCurrentRefreshToken(refreshToken, userDto.email);
     request.res.setHeader("Set-Cookie", [tokenCookie, refreshTokenCookie, ]);
