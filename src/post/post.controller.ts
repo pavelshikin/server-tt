@@ -48,13 +48,13 @@ export class PostController {
       return this.postService.deletePost(id)
    }
 
-   @Roles('OWNER' || 'ADMIN')
+   @Roles('OWNER', 'ADMIN')
    @UseGuards(RolesGuard)
    @Get('/category/:id')
    getPostsCategory(@Param('id') id: ObjectId) {
       return this.postService.getPostsCategory(id)
    }
-   
+
    @UseGuards(JwtAuthGuard)
    @Put()
    update(@Body() dto: UpdatePostDto) {
