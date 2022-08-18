@@ -37,8 +37,8 @@ export class UsersService {
    async getUserIfRefreshTokenMatches(refreshToken: string, userId: ObjectId){
       const user = await this.getUser(userId)
       const isRefreshTokenMatching = await bcrypt.compare(
-        refreshToken,
-        user.currentHashedRefreshToken
+         refreshToken,
+         user.currentHashedRefreshToken
       );
 
       if (isRefreshTokenMatching) {
@@ -53,7 +53,8 @@ export class UsersService {
    }
 
    async getAllUsers() {
-      const users = await this.userModel.find()
+      const users = await this.userModel.find({}, ['_id', 'roles', 'username']);
+      console.log(users);
       return users
    }
 
