@@ -36,7 +36,7 @@ export class AuthService {
     const user = await this.userService.createUser({ ...userDto, password: hashPassword });
     const { token, tokenCookie } = await this.generateToken(user);
     const { refreshToken, refreshTokenCookie } = await this.generateRefreshToken(user);
-   return { token, tokenCookie, refreshToken, refreshTokenCookie, userId: user._id }; 
+   return { token, tokenCookie, refreshToken, refreshTokenCookie, userId: user._id, roles: user.roles };
  }
 
   private async generateToken(user) {

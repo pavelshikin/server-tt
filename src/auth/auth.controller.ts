@@ -29,10 +29,10 @@ export class AuthController {
   @Post("/registration")
   async registration(@Body() userDto: CreateUserDto,
                     @Req() request: Request) {
-    const { token, tokenCookie, refreshToken, refreshTokenCookie, userId } = await this.authService.registration(userDto);
+    const { token, tokenCookie, refreshToken, refreshTokenCookie, userId, roles } = await this.authService.registration(userDto);
     await this.authService.setCurrentRefreshToken(refreshToken, userDto.email);
     request.res.setHeader("Set-Cookie", [tokenCookie, refreshTokenCookie, ]);
-    return { Authentication: token, Refresh: refreshToken, userId };
+    return { Authentication: token, Refresh: refreshToken, userId, roles };
   }
 
   @UseGuards(JwtRefreshGuard)
