@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Req, UseGuards} from '@nestjs/common'
+import {Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards} from '@nestjs/common'
 import {UsersService} from './users.service'
 import {Roles} from '../auth/roles-auth.decorator'
 import {RolesGuard} from '../auth/roles.guard'
@@ -45,6 +45,13 @@ export class UsersController {
    @Post('/role')
    addRole(@Body() dto: AddRoleDto) {
       return this.userService.addRole(dto)
+   }
+
+   @Roles('OWNER')
+   @UseGuards(RolesGuard)
+   @Put('/role')
+   removeRole(@Body() dto: AddRoleDto) {
+      return this.userService.removeRole(dto)
    }
 
    @Roles('OWNER' || 'ADMIN')

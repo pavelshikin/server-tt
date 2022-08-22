@@ -20,7 +20,6 @@ export class UsersService {
       const role = await this.roleService.getRoleByValue('USER')
       if (role && user) {
          user.roles.push(role.value)
-         role.users.push(user._id)
          await user.save()
          await role.save()
          return user
@@ -53,8 +52,7 @@ export class UsersService {
    }
 
    async getAllUsers() {
-      const users = await this.userModel.find({}, ['_id', 'roles', 'username']);
-      console.log(users);
+      const users = await this.userModel.find({}, ['_id', 'roles', 'username', 'email']);
       return users
    }
 
@@ -80,7 +78,7 @@ export class UsersService {
       if (!user) {
          throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND)
       }
-      return {message: 'Пользователь удален'}
+      return {id: id, message: 'Пользователь удален'}
    }
 
    async getUserByEmail(email: string) {
@@ -101,12 +99,37 @@ export class UsersService {
    async addRole(dto: AddRoleDto) {
       const user = await this.userModel.findById(dto.userId)
       const role = await this.roleService.getRoleByValue(dto.value)
+
       if (role && user) {
-         user.roles.push(role.value)
-         role.users.push(user._id)
-         await user.save()
-         await role.save()
-         return role
+         if(user.roles.indexOf(role.value) < 0) {
+            user.roles.push(role.value)
+            await user.save()
+            await role.save()
+            return {
+               userId: user._id,
+               role: role.value
+            }
+         }
+         throw new HttpException('Данная роль уже есть у пользователя', HttpStatus.NOT_FOUND)
+      }
+      throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND)
+   }
+
+   async removeRole(dto: AddRoleDto) {
+      const user = await this.userModel.findById(dto.userId)
+      const role = await this.roleService.getRoleByValue(dto.value)
+
+      if (role && user) {
+         if(user.roles.indexOf(role.value) > -1) {
+            user.roles = user.roles.filter(r => r !== role.value)
+            await user.save()
+            await role.save()
+            return {
+               userId: user._id,
+               role: role.value
+            }
+         }
+         throw new HttpException('Не найдена роль у пользователя', HttpStatus.NOT_FOUND)
       }
       throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND)
    }
