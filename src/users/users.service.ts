@@ -69,7 +69,8 @@ export class UsersService {
       return {
          _id: me._id,
          username: me.username,
-         roles: me.roles
+         roles: me.roles,
+         email: me.email
       }
    }
 
