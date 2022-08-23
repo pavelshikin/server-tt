@@ -2,13 +2,13 @@ import { Controller, Get } from "@nestjs/common";
 
 @Controller("/")
 export class AppController {
-  constructor() {
-  }
+   constructor() {
+   }
 
-  @Get()
-  get() {
-    return `<div style="text-align: center">
-                  <h1>Techno train API</h1>
-              </div>`;
-  }
+   @Get()
+   get() {
+      return `<div style="text-align: center">
+                  <h1 style="padding-top: 10%">Techno Train API</h1>
+               </div>`;
+   }
 }
