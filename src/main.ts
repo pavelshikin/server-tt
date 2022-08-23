@@ -11,7 +11,7 @@ const start = async () => {
 
     app.use(cookieParser());
 
-    app.enableCors({
+   /*  app.enableCors({
       origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {
          callback(null, true);
@@ -23,14 +23,15 @@ const start = async () => {
       allowedHeaders: 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
       credentials: true,
       exposedHeaders: ["set-cookie"],
-    });
+    }); */
 
-  /*
+
    app.enableCors({
       origin: "http://127.0.0.1:3000",
       credentials: true
-    });
-    */
+   });365
+
+
 
     app.useGlobalPipes(new ValidationPipe());
 
