@@ -32,8 +32,8 @@ export class RolesGuard implements CanActivate {
       }
 
       let token: any;
-      // token = req.cookies?.Authentication;
-      token = req.headers.authorization.split(" ")[1];
+      token = req.cookies?.Authentication;
+      // token = req.headers.authorization.split(" ")[1];
 
       if (!token) {
         throw new UnauthorizedException({ message: "Пользователь не авторизован" });
@@ -48,9 +48,9 @@ export class RolesGuard implements CanActivate {
       }*/
 
       const user = this.jwtService.verify(token);
-      
+
       req.user = user;
-      
+
       return user.roles.some(role => requiredRoles.includes(role));
 
     } catch (e) {
